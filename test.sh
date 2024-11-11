@@ -11,7 +11,9 @@ LD_SCRIPT=$BUILD_DIR/linker_riscv64-qemu-virt.lds
 GLOBAL_CFG='--cfg=blk --cfg=bus="mmio" --cfg=block_dev="virtio-blk"'
 export RUSTFLAGS="-C link-arg=-T$LD_SCRIPT -C link-arg=-no-pie $GLOBAL_CFG"
 
+rm -f ./disk.img
 dd if=/dev/zero of=./disk.img bs=1M count=256
+mkfs.ext2 ./disk.img
 
 cargo build --target riscv64gc-unknown-none-elf --release --manifest-path $TEST_NAME/Cargo.toml
 
